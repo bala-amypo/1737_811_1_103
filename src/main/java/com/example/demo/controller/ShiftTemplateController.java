@@ -10,19 +10,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ShiftTemplateController{
     @PostMapping("/department/{departmentId}")
     public String createTemplate(@PathVariable Long departmentId){
-        return "Shift template created for department "+departmentId;
+        return "Shift template created for department "+ departmentId;
     }
     @GetMapping("/department/{departmentId}")
     public String listTemplates(@PathVariable Long departmentId){
-        return "List of employees";
+        return "Templates for department "+ departmentId;
     }
     @GetMapping("/{id}")
-    public String getById(@PathVrariable Long id){
-        return "Employee "+id;
+    public String getTemplate(@PathVrariable Long id){
+        return "Template "+id;
     }
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
-        return "Deleted employee "+id;
-    }
+   
 }
 

@@ -7,5 +7,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeC
+public class EmployeeController{
+    @PostMapping("/register")
+    public String register(){
+        return "Employee registered";
+    }
+    @GetMapping
+    public String getAll(){
+        return "List of employees";
+    }
+    @GetMapping("/{id}")
+    public String getById(@PathVrariable Long id){
+        return "Employee "+id;
+    }
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id){
+        return "Deleted employee "+id;
+    }
+}
 

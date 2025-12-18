@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/employees")
 public class EmployeeController{
-    @PostMapping
+    @PostMapping("/register")
     public String register(){
         return "Employee registered";
     }

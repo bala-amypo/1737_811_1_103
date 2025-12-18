@@ -12,16 +12,9 @@ public class ScheduleController{
         return "Schedule generated for "+date;
     }
     @GetMapping("/date/{date}")
-    public String get(@PathVariable Long employeeId){
-        return "Availability of employee "+employeeId;
+    public String getSchedule(@PathVariable String date){
+        return "Schedule for "+date;
     }
-    @GetMapping("/{availabilityId}")
-    public String getSpecificAvailability(@PathVrariable Long availabilityId){
-        return "Availability record "+availabilityId;
-    }
-    @GetMapping("/date/{date}")
-    public String getAvailabilityByDate(@PathVariable String date){
-        return "Availability on "+date;
-    
+   
 }
 

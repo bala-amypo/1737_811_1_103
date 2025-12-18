@@ -6,23 +6,23 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping
 public class DepartmentController{
-    @PostMapping("/register")
-    public String regist(){
-        return "Employee registered";
+    @PostMapping
+    public String createDepartment(){
+        return "Department created";
     }
     @GetMapping
-    public String getAll(){
-        return "List of employees";
+    public String getAllDepartments(){
+        return "All departments";
     }
     @GetMapping("/{id}")
-    public String getById(@PathVrariable Long id){
-        return "Employee "+id;
+    public String getDepartment(@PathVrariable Long id){
+        return "Department "+id;
     }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
-        return "Deleted employee "+id;
+    public String deleteDepartment(@PathVariable Long id){
+        return "Deleted department "+id;
     }
 }
 

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/api/availability")
 public class AvailabilityController{
     @PostMapping("/{employeeId}")
-    public String register(){
-        return "Employee registered";
+    public String setAvailability(@PathVariable Long employeeId){
+        return "Availability set for employee "+employeeId;
     }
-    @GetMapping
-    public String getAll(){
-        return "List of employees";
+    @GetMapping("/employee/{employeeId}")
+    public String getEmployeeAvailability(@PathVariable Long employeeId){
+        return "Availability of employee "+employeeId;
     }
     @GetMapping("/{id}")
     public String getById(@PathVrariable Long id){

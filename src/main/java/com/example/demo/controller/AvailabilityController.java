@@ -20,8 +20,8 @@ public class AvailabilityController{
         return "Availability record "+availabilityId;
     }
     @GetMapping("/date/{date}")
-    public String delete(@PathVariable Long id){
-        return "Deleted employee "+id;
-    }
+    public String getAvailabilityByDate(@PathVariable String date){
+        return "Availability on "+date;
+    
 }
 

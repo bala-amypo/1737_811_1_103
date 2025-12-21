@@ -1,11 +1,13 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import lombok.*;
+import java.time.*;
 
 @Entity
-@Table(name = "generated_shift_schedule")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GeneratedShiftSchedule {
 
     @Id
@@ -13,20 +15,15 @@ public class GeneratedShiftSchedule {
     private Long id;
 
     private LocalDate shiftDate;
-
     private LocalTime startTime;
-
     private LocalTime endTime;
 
-    @ManyToOne
-    @JoinColumn(name = "shift_template_id")
+    @ManyToOne(optional = false)
     private ShiftTemplate shiftTemplate;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
+    @ManyToOne(optional = false)
     private Department department;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @ManyToOne(optional = false)
     private Employee employee;
 }

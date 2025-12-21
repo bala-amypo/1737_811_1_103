@@ -1,28 +1,25 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "departments", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable=false , unique=true)
     private String name;
 
     private String description;
 
     private String requiredSkills;
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

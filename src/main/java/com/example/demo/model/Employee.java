@@ -1,33 +1,31 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "employees", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable=false)
     private String fullName;
 
+    @Column(nullable=false, unique=true)
     private String email;
 
-    private String role; // ADMIN / STAFF
+    private String role = "STAFF";
 
-    private String skills; // comma-separated
+    private String skills;
 
+    @Column(nullable=false)
     private Integer maxWeeklyHours;
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-        if (role == null) role = "STAFF";
-    }
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

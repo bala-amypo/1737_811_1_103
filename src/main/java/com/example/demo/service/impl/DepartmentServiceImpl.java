@@ -1,40 +1,34 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.Department;
+import com.example.demo.repository.DepartmentRepository;
+import com.example.demo.service.DepartmentService;
 import org.springframework.stereotype.Service;
 
-import com.example.scheduler.entity.Department;
-import com.example.scheduler.repository.DepartmentRepository;
-import com.example.scheduler.service.DepartmentService;
+import java.util.List;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    @Autowired
-    private DepartmentRepository repo;
+    private final DepartmentRepository repo;
 
-    @Override
-    public Department create(Department d) {
-        if (repo.existsByName(d.getName())) {
-            throw new RuntimeException("Duplicate department!");
-        }
-        return repo.save(d);
+    public DepartmentServiceImpl(DepartmentRepository repo){
+        this.repo = repo;
     }
 
-    @Override
-    public Department get(Long id) {
+    public Department create(Department dep){
+        if(repo.existsByName(dep.getName()))
+            throw new RuntimeException("exists");
+
+        return repo.save(dep);
+    }
+
+    public Department get(Long id){
         return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    @Override
-    public void delete(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public List<Department> getAll() {
+    public List<Department> getAll(){
         return repo.findAll();
     }
 }

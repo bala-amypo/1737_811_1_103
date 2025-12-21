@@ -1,35 +1,56 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.GeneratedShiftSchedule;
+import com.example.demo.model.ShiftTemplate;
+import com.example.demo.repository.GeneratedShiftScheduleRepository;
+import com.example.demo.repository.ShiftTemplateRepository;
+import com.example.demo.repository.AvailabilityRepository;
+import com.example.demo.service.ScheduleService;
 import org.springframework.stereotype.Service;
 
-import com.example.scheduler.entity.GeneratedShiftSchedule;
-import com.example.scheduler.repository.GeneratedShiftScheduleRepository;
-import com.example.scheduler.service.ScheduleService;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    @Autowired
-    private GeneratedShiftScheduleRepository repo;
+    private final GeneratedShiftScheduleRepository scheduleRepo;
+    private final ShiftTemplateRepository templateRepo;
+    private final AvailabilityRepository availabilityRepo;
 
-    @Override
-    public List<GeneratedShiftSchedule> generate(LocalDate date) {
-
-        // TODO Shift auto allocation logic:
-        // 1. fetch shifts assigned on date
-        // 2. fetch available employees
-        // 3. match skills + availability
-        // 4. assign and persist records
-
-        return repo.saveAll(/* finalSchedules */ null);
+    public ScheduleServiceImpl(
+            GeneratedShiftScheduleRepository scheduleRepo,
+            ShiftTemplateRepository templateRepo,
+            AvailabilityRepository availabilityRepo
+    ){
+        this.scheduleRepo = scheduleRepo;
+        this.templateRepo = templateRepo;
+        this.availabilityRepo = availabilityRepo;
     }
 
-    @Override
-    public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return repo.findByDate(date);
+    public List<GeneratedShiftSchedule> generateForDate(LocalDate date){
+
+        List<ShiftTemplate> templates = templateRepo.findAll();
+
+        List<GeneratedShiftSchedule> list = new ArrayList<>();
+
+        for(ShiftTemplate t : templates){
+
+            GeneratedShiftSchedule gs = new GeneratedShiftSchedule();
+            gs.setShiftDate(date);
+            gs.setDepartment(t.getDepartment());
+            gs.setShiftTemplate(t);
+            gs.setStartTime(t.getStartTime());
+            gs.setEndTime(t.getEndTime());
+
+            scheduleRepo.save(gs);
+            list.add(gs);
+        }
+
+        return list;
+    }
+
+    public List<GeneratedShiftSchedule> getByDate(LocalDate date){
+        return scheduleRepo.findByShiftDate(date);
     }
 }

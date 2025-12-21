@@ -1,45 +1,37 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
-import com.example.scheduler.entity.Employee;
-import com.example.scheduler.repository.EmployeeRepository;
-import com.example.scheduler.service.EmployeeService;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private EmployeeRepository repo;
+    private final EmployeeRepository repo;
 
-    @Override
-    public Employee createEmployee(Employee e) {
-        if (repo.existsByEmail(e.getEmail())) {
-            throw new RuntimeException("Duplicate email!");
-        }
-        return repo.save(e);
+    public EmployeeServiceImpl(EmployeeRepository repo){
+        this.repo = repo;
     }
 
-    @Override
-    public Employee getEmployee(Long id) {
+    public Employee createEmployee(Employee emp){
+        if(repo.existsByEmail(emp.getEmail()))
+            throw new RuntimeException("exists");
+
+        if(emp.getMaxWeeklyHours() <= 0)
+            throw new IllegalArgumentException("must");
+
+        return repo.save(emp);
+    }
+
+    public Employee getEmployee(Long id){
         return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
-    @Override
-    public Employee update(Employee employee) {
-        return repo.save(employee);
-    }
-
-    @Override
-    public void deleteEmployee(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public List<Employee> getAll() {
+    public List<Employee> getAll(){
         return repo.findAll();
     }
 }

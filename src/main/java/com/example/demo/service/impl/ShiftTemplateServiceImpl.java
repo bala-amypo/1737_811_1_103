@@ -1,40 +1,37 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.ShiftTemplate;
+import com.example.demo.repository.ShiftTemplateRepository;
+import com.example.demo.service.ShiftTemplateService;
 import org.springframework.stereotype.Service;
 
-import com.example.scheduler.entity.ShiftTemplate;
-import com.example.scheduler.repository.ShiftTemplateRepository;
-import com.example.scheduler.service.ShiftTemplateService;
+import java.util.List;
 
 @Service
 public class ShiftTemplateServiceImpl implements ShiftTemplateService {
 
-    @Autowired
-    private ShiftTemplateRepository repo;
+    private final ShiftTemplateRepository repo;
 
-    @Override
-    public ShiftTemplate create(ShiftTemplate template) {
-
-        if (repo.existsByDepartmentIdAndStartTimeAndEndTime(
-                template.getDepartment().getId(),
-                template.getStartTime(),
-                template.getEndTime())) 
-        {
-            throw new RuntimeException("Duplicate shift timing!");
-        }
-
-        return repo.save(template);
+    public ShiftTemplateServiceImpl(ShiftTemplateRepository repo){
+        this.repo = repo;
     }
 
-    @Override
-    public List<ShiftTemplate> getByDepartment(Long departmentId) {
-        return repo.findByDepartmentId(departmentId);
+    public ShiftTemplate create(ShiftTemplate t){
+
+        if(!t.getEndTime().isAfter(t.getStartTime()))
+            throw new IllegalArgumentException("after");
+
+        repo.findByTemplateNameAndDepartment_Id(
+                t.getTemplateName(),
+                t.getDepartment().getId()
+        ).ifPresent(x -> {
+            throw new RuntimeException("unique");
+        });
+
+        return repo.save(t);
     }
 
-    @Override
-    public List<ShiftTemplate> getAll() {
-        return repo.findAll();
+    public List<ShiftTemplate> getByDepartment(Long depId){
+        return repo.findByDepartment_Id(depId);
     }
 }

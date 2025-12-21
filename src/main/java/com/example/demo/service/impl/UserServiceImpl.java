@@ -1,29 +1,32 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.example.scheduler.entity.User;
-import com.example.scheduler.repository.UserRepository;
-import com.example.scheduler.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
-    @Override
-    public User register(User user) {
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
-        }
-        return userRepo.save(user);
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder){
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public User register(User user){
+        if(repo.existsByEmail(user.getEmail()))
+            throw new RuntimeException("exists");
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        return repo.save(user);
+    }
+
+    public User findByEmail(String email){
+        return repo.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("not found"));
     }
 }

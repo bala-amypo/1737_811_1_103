@@ -1,37 +1,34 @@
-package com.example.scheduler.service.impl;
+package com.example.demo.service.impl;
+
+import com.example.demo.model.EmployeeAvailability;
+import com.example.demo.repository.AvailabilityRepository;
+import com.example.demo.service.AvailabilityService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.example.scheduler.entity.EmployeeAvailability;
-import com.example.scheduler.repository.EmployeeAvailabilityRepository;
-import com.example.scheduler.service.AvailabilityService;
 
 @Service
 public class AvailabilityServiceImpl implements AvailabilityService {
 
-    @Autowired
-    private EmployeeAvailabilityRepository repo;
+    private final AvailabilityRepository repo;
 
-    @Override
-    public EmployeeAvailability create(EmployeeAvailability availability) {
-        return repo.save(availability);
+    public AvailabilityServiceImpl(AvailabilityRepository repo){
+        this.repo = repo;
     }
 
-    @Override
-    public EmployeeAvailability update(EmployeeAvailability availability) {
-        return repo.save(availability);
+    public EmployeeAvailability create(EmployeeAvailability avail){
+        repo.findByEmployee_IdAndAvailableDate(
+                avail.getEmployee().getId(),
+                avail.getAvailableDate()
+        ).ifPresent(x -> {
+            throw new RuntimeException("exists");
+        });
+
+        return repo.save(avail);
     }
 
-    @Override
-    public void delete(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public List<EmployeeAvailability> getByDate(LocalDate date) {
-        return repo.findByDate(date);
+    public List<EmployeeAvailability> getByDate(LocalDate date){
+        return repo.findByAvailableDateAndAvailable(date, true);
     }
 }

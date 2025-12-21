@@ -1,29 +1,45 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Department;
+import com.example.demo.service.DepartmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
 
+    private final DepartmentService departmentService;
+
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
+
     @PostMapping
-    public String createDepartment() {
-        return "Department created";
+    public ResponseEntity<Department> create(@RequestBody Department department) {
+        return ResponseEntity.ok(departmentService.save(department));
     }
 
     @GetMapping
-    public String getAllDepartments() {
-        return "All departments";
+    public ResponseEntity<List<Department>> getAll() {
+        return ResponseEntity.ok(departmentService.getAll());
     }
 
     @GetMapping("/{id}")
-    public String getDepartment(@PathVariable Long id) {
-        return "Department " + id;
+    public ResponseEntity<Department> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(departmentService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Department> update(@PathVariable Long id,@RequestBody Department department) {
+        return ResponseEntity.ok(departmentService.update(id, department));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDepartment(@PathVariable Long id) {
-        return "Department deleted";
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        departmentService.delete(id);
+        return ResponseEntity.ok("Department deleted");
     }
 }
-

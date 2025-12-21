@@ -1,28 +1,35 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Availability;
+import com.example.demo.service.AvailabilityService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/availability")
 public class AvailabilityController {
 
-    @PostMapping("/employee/{employeeId}")
-    public String setAvailability(@PathVariable Long employeeId) {
-        return "Availability set";
+    private final AvailabilityService availabilityService;
+
+    public AvailabilityController(AvailabilityService availabilityService) {
+        this.availabilityService = availabilityService;
     }
 
-    @GetMapping("/employee/{employeeId}")
-    public String getAvailabilityByEmployee(@PathVariable Long employeeId) {
-        return "Employee availability";
+    @PostMapping
+    public ResponseEntity<Availability> create(@RequestBody Availability availability) {
+        return ResponseEntity.ok(availabilityService.save(availability));
     }
 
-    @GetMapping("/{availabilityId}")
-    public String getAvailability(@PathVariable Long availabilityId) {
-        return "Specific availability";
+    @GetMapping
+    public ResponseEntity<List<Availability>> getAll() {
+        return ResponseEntity.ok(availabilityService.getAll());
     }
 
-    @GetMapping("/date/{date}")
-    public String getAvailabilityByDate(@PathVariable String date) {
-        return "Availability by date";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        availabilityService.delete(id);
+        return ResponseEntity.ok("Availability removed");
     }
 }

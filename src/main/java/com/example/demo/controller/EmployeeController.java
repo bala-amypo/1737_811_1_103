@@ -1,29 +1,45 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Employee;
+import com.example.demo.service.EmployeeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
 
-    @PostMapping("/register")
-    public String registerEmployee() {
-        return "Employee registered";
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Employee> create(@RequestBody Employee employee) {
+        return ResponseEntity.ok(employeeService.save(employee));
     }
 
     @GetMapping
-    public String getAllEmployees() {
-        return "All employees";
+    public ResponseEntity<List<Employee>> getAll() {
+        return ResponseEntity.ok(employeeService.getAll());
     }
 
     @GetMapping("/{id}")
-    public String getEmployee(@PathVariable Long id) {
-        return "Employee " + id;
+    public ResponseEntity<Employee> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> update(@PathVariable Long id,@RequestBody Employee employee) {
+        return ResponseEntity.ok(employeeService.update(id, employee));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
-        return "Employee deleted";
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        employeeService.delete(id);
+        return ResponseEntity.ok("Employee deleted");
     }
 }
-

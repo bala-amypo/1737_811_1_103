@@ -1,23 +1,42 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.ShiftTemplate;
+import com.example.demo.service.ShiftTemplateService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/templates")
+@RequestMapping("/api/shift-templates")
 public class ShiftTemplateController {
 
-    @PostMapping("/department/{departmentId}")
-    public String createShiftTemplate(@PathVariable Long departmentId) {
-        return "Shift template created";
+    private final ShiftTemplateService shiftTemplateService;
+
+    public ShiftTemplateController(ShiftTemplateService shiftTemplateService) {
+        this.shiftTemplateService = shiftTemplateService;
     }
 
-    @GetMapping("/department/{departmentId}")
-    public String getTemplatesByDepartment(@PathVariable Long departmentId) {
-        return "Templates by department";
+    @PostMapping
+    public ResponseEntity<ShiftTemplate> create(@RequestBody ShiftTemplate shiftTemplate) {
+        return ResponseEntity.ok(shiftTemplateService.save(shiftTemplate));
     }
 
-    @GetMapping("/{id}")
-    public String getTemplate(@PathVariable Long id) {
-        return "Template " + id;
+    @GetMapping
+    public ResponseEntity<List<ShiftTemplate>> getAll() {
+        return ResponseEntity.ok(shiftTemplateService.getAll());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ShiftTemplate> update(
+            @PathVariable Long id,
+            @RequestBody ShiftTemplate shiftTemplate) {
+        return ResponseEntity.ok(shiftTemplateService.update(id, shiftTemplate));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        shiftTemplateService.delete(id);
+        return ResponseEntity.ok("Shift template deleted");
     }
 }

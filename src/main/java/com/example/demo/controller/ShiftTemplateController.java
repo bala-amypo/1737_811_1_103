@@ -1,24 +1,23 @@
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/templates")
-public class ShiftTemplateController{
-    @PostMapping("/department/{departmentId}")
-    public String createTemplate(@PathVariable Long departmentId){
-        return "Shift template created for department "+ departmentId;
-    }
-    @GetMapping("/department/{departmentId}")
-    public String listTemplates(@PathVariable Long departmentId){
-        return "Templates for department "+ departmentId;
-    }
-    @GetMapping("/{id}")
-    public String getTemplate(@PathVrariable Long id){
-        return "Template "+id;
-    }
-   
-}
+public class ShiftTemplateController {
 
+    @PostMapping("/department/{departmentId}")
+    public String createShiftTemplate(@PathVariable Long departmentId) {
+        return "Shift template created";
+    }
+
+    @GetMapping("/department/{departmentId}")
+    public String getTemplatesByDepartment(@PathVariable Long departmentId) {
+        return "Templates by department";
+    }
+
+    @GetMapping("/{id}")
+    public String getTemplate(@PathVariable Long id) {
+        return "Template " + id;
+    }
+}

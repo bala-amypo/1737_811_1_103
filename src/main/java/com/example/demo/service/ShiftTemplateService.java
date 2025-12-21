@@ -1,10 +1,9 @@
-package com.example.scheduler.service;
+package com.example.demo.service;
 
+import com.example.demo.model.ShiftTemplate;
 import java.util.List;
-import com.example.scheduler.entity.ShiftTemplate;
 
 public interface ShiftTemplateService {
     ShiftTemplate create(ShiftTemplate template);
     List<ShiftTemplate> getByDepartment(Long departmentId);
-    List<ShiftTemplate> getAll();
 }

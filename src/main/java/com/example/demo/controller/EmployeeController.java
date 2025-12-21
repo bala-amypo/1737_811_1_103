@@ -1,28 +1,29 @@
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeController{
+public class EmployeeController {
+
     @PostMapping("/register")
-    public String register(){
+    public String registerEmployee() {
         return "Employee registered";
     }
+
     @GetMapping
-    public String getAll(){
-        return "List of employees";
+    public String getAllEmployees() {
+        return "All employees";
     }
+
     @GetMapping("/{id}")
-    public String getById(@PathVrariable Long id){
-        return "Employee "+id;
+    public String getEmployee(@PathVariable Long id) {
+        return "Employee " + id;
     }
+
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
-        return "Deleted employee "+id;
+    public String deleteEmployee(@PathVariable Long id) {
+        return "Employee deleted";
     }
 }
 

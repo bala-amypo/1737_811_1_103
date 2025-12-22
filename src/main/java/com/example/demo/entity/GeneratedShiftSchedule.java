@@ -1,12 +1,17 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Entity
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "generated_shift_schedule")
 public class GeneratedShiftSchedule {
 
     @Id
@@ -14,6 +19,8 @@ public class GeneratedShiftSchedule {
     private Long id;
 
     private Long employeeId;
+
     private Long shiftTemplateId;
-    private String date;
+
+    private LocalDate date;
 }

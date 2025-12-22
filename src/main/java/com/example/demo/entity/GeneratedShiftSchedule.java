@@ -1,40 +1,19 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import lombok.*;
 
 @Entity
-@Table(name = "generated_shift_schedules")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GeneratedShiftSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate shiftDate;
-
-    private LocalTime startTime;
-
-    private LocalTime endTime;
-
-    private Long departmentId;
-
-    private Long shiftTemplateId;
-
     private Long employeeId;
-
-    public GeneratedShiftSchedule() {}
-
-    public GeneratedShiftSchedule(LocalDate shiftDate, LocalTime startTime, LocalTime endTime,
-                                  Long departmentId, Long shiftTemplateId, Long employeeId) {
-        this.shiftDate = shiftDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.departmentId = departmentId;
-        this.shiftTemplateId = shiftTemplateId;
-        this.employeeId = employeeId;
-    }
-
-    // getters & setters omitted for brevity
+    private Long shiftTemplateId;
+    private String date;
 }

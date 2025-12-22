@@ -2,17 +2,17 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.GeneratedShiftSchedule;
 import com.example.demo.repository.GeneratedShiftScheduleRepository;
-import com.example.demo.service.GeneratedShiftScheduleService;
+import com.example.demo.service.ScheduleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class GeneratedShiftScheduleServiceImpl implements GeneratedShiftScheduleService {
+public class ScheduleServiceImpl implements ScheduleService {
 
     private final GeneratedShiftScheduleRepository scheduleRepository;
 
-    public GeneratedShiftScheduleServiceImpl(GeneratedShiftScheduleRepository scheduleRepository) {
+    public ScheduleServiceImpl(GeneratedShiftScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 

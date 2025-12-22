@@ -12,7 +12,7 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    public GeneratedShiftScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
 

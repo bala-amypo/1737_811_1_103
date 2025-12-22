@@ -10,41 +10,33 @@ import java.util.List;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private final GeneratedShiftScheduleRepository scheduleRepository;
+    private final GeneratedShiftScheduleRepository repo;
 
-    public ScheduleServiceImpl(GeneratedShiftScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
-
-    @Override
-    public GeneratedShiftSchedule saveSchedule(GeneratedShiftSchedule schedule) {
-        return scheduleRepository.save(schedule);
-    }
-
-    @Override
-    public GeneratedShiftSchedule getSchedule(Long id) {
-        return scheduleRepository.findById(id)
-                .orElse(null);
+    public ScheduleServiceImpl(GeneratedShiftScheduleRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public List<GeneratedShiftSchedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+        return repo.findAll();
     }
 
     @Override
-    public GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule updated) {
-        return scheduleRepository.findById(id)
-                .map(existing -> {
-                    existing.setEmployeeId(updated.getEmployeeId());
-                    existing.setShiftTemplateId(updated.getShiftTemplateId());
-                    existing.setDate(updated.getDate());
-                    return scheduleRepository.save(existing);
-                }).orElse(null);
+    public GeneratedShiftSchedule createSchedule(GeneratedShiftSchedule schedule) {
+        return repo.save(schedule);
+    }
+
+    @Override
+    public GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule schedule) {
+        GeneratedShiftSchedule existing = repo.findById(id).orElseThrow();
+        existing.setEmployeeId(schedule.getEmployeeId());
+        existing.setShiftTemplateId(schedule.getShiftTemplateId());
+        existing.setDate(schedule.getDate());
+        return repo.save(existing);
     }
 
     @Override
     public void deleteSchedule(Long id) {
-        scheduleRepository.deleteById(id);
+        repo.deleteById(id);
     }
 }

@@ -5,9 +5,11 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    GeneratedShiftSchedule saveSchedule(GeneratedShiftSchedule schedule);
-    GeneratedShiftSchedule getSchedule(Long id);
     List<GeneratedShiftSchedule> getAllSchedules();
+
+    GeneratedShiftSchedule createSchedule(GeneratedShiftSchedule schedule);
+
     GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule schedule);
+
     void deleteSchedule(Long id);
 }

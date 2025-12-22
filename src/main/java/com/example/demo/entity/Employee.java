@@ -1,12 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Table(
-        name = "employees",
-        uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     @Id
@@ -14,25 +14,8 @@ public class Employee {
     private Long id;
 
     private String name;
-
-    @Column(nullable = false, unique = true)
     private String email;
-
     private String phone;
-
     private String position;
-
-    private Boolean active = true;
-
-    public Employee() {}
-
-    public Employee(String name, String email, String phone, String position, Boolean active) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.position = position;
-        this.active = active;
-    }
-
-    // getters and setters omitted for brevity
+    private Boolean active;
 }

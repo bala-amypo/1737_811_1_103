@@ -1,29 +1,50 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.GeneratedShiftSchedule;
+import com.example.demo.entity.GeneratedShiftSchedule;
 import com.example.demo.repository.GeneratedShiftScheduleRepository;
 import com.example.demo.service.GeneratedShiftScheduleService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class GeneratedShiftScheduleServiceImpl implements GeneratedShiftScheduleService {
 
-    private final GeneratedShiftScheduleRepository generatedShiftScheduleRepository;
+    private final GeneratedShiftScheduleRepository scheduleRepository;
 
-    public GeneratedShiftScheduleServiceImpl(GeneratedShiftScheduleRepository generatedShiftScheduleRepository) {
-        this.generatedShiftScheduleRepository = generatedShiftScheduleRepository;
+    public GeneratedShiftScheduleServiceImpl(GeneratedShiftScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Override
-    public GeneratedShiftSchedule save(GeneratedShiftSchedule schedule) {
-        return generatedShiftScheduleRepository.save(schedule);
+    public GeneratedShiftSchedule saveSchedule(GeneratedShiftSchedule schedule) {
+        return scheduleRepository.save(schedule);
     }
 
     @Override
-    public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return generatedShiftScheduleRepository.findByShiftDate(date);
+    public GeneratedShiftSchedule getSchedule(Long id) {
+        return scheduleRepository.findById(id)
+                .orElse(null);
+    }
+
+    @Override
+    public List<GeneratedShiftSchedule> getAllSchedules() {
+        return scheduleRepository.findAll();
+    }
+
+    @Override
+    public GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule updated) {
+        return scheduleRepository.findById(id)
+                .map(existing -> {
+                    existing.setEmployeeId(updated.getEmployeeId());
+                    existing.setShiftTemplateId(updated.getShiftTemplateId());
+                    existing.setDate(updated.getDate());
+                    return scheduleRepository.save(existing);
+                }).orElse(null);
+    }
+
+    @Override
+    public void deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
     }
 }

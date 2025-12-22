@@ -17,21 +17,30 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public GeneratedShiftSchedule saveSchedule(GeneratedShiftSchedule schedule) {
+        return repo.save(schedule);
+    }
+
+    @Override
+    public GeneratedShiftSchedule getSchedule(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+    }
+
+    @Override
     public List<GeneratedShiftSchedule> getAllSchedules() {
         return repo.findAll();
     }
 
     @Override
-    public GeneratedShiftSchedule createSchedule(GeneratedShiftSchedule schedule) {
-        return repo.save(schedule);
-    }
-
-    @Override
     public GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule schedule) {
-        GeneratedShiftSchedule existing = repo.findById(id).orElseThrow();
+        GeneratedShiftSchedule existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+
+        existing.setDate(schedule.getDate());
         existing.setEmployeeId(schedule.getEmployeeId());
         existing.setShiftTemplateId(schedule.getShiftTemplateId());
-        existing.setDate(schedule.getDate());
+
         return repo.save(existing);
     }
 

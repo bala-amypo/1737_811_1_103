@@ -17,19 +17,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department createDepartment(Department department) {
-
-        if (departmentRepository.existsByName(department.getName())) {
-            throw new RuntimeException("Department name must be unique");
-        }
-
+    public Department saveDepartment(Department department) {
         return departmentRepository.save(department);
     }
 
     @Override
     public Department getDepartment(Long id) {
         return departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+                .orElse(null);
     }
 
     @Override
@@ -38,8 +33,16 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public Department updateDepartment(Long id, Department updated) {
+        return departmentRepository.findById(id)
+                .map(existing -> {
+                    existing.setName(updated.getName());
+                    return departmentRepository.save(existing);
+                }).orElse(null);
+    }
+
+    @Override
     public void deleteDepartment(Long id) {
-        getDepartment(id);
         departmentRepository.deleteById(id);
     }
 }

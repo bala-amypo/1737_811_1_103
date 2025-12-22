@@ -17,23 +17,34 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     }
 
     @Override
-    public ShiftTemplate createShift(ShiftTemplate shiftTemplate) {
-
-        if (shiftTemplate.getStartTime().isAfter(shiftTemplate.getEndTime())) {
-            throw new RuntimeException("Start time must be before end time");
-        }
-
+    public ShiftTemplate saveShiftTemplate(ShiftTemplate shiftTemplate) {
         return shiftTemplateRepository.save(shiftTemplate);
     }
 
     @Override
-    public ShiftTemplate getShift(Long id) {
+    public ShiftTemplate getShiftTemplate(Long id) {
         return shiftTemplateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Shift template not found"));
+                .orElse(null);
     }
 
     @Override
-    public List<ShiftTemplate> getShiftsByDepartment(Long departmentId) {
-        return shiftTemplateRepository.findByDepartmentId(departmentId);
+    public List<ShiftTemplate> getAllShiftTemplates() {
+        return shiftTemplateRepository.findAll();
+    }
+
+    @Override
+    public ShiftTemplate updateShiftTemplate(Long id, ShiftTemplate updated) {
+        return shiftTemplateRepository.findById(id)
+                .map(existing -> {
+                    existing.setDepartmentId(updated.getDepartmentId());
+                    existing.setStartTime(updated.getStartTime());
+                    existing.setEndTime(updated.getEndTime());
+                    return shiftTemplateRepository.save(existing);
+                }).orElse(null);
+    }
+
+    @Override
+    public void deleteShiftTemplate(Long id) {
+        shiftTemplateRepository.deleteById(id);
     }
 }

@@ -1,10 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalTime;
+import lombok.*;
 
 @Entity
-@Table(name = "shift_templates")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShiftTemplate {
 
     @Id
@@ -12,21 +14,6 @@ public class ShiftTemplate {
     private Long id;
 
     private Long departmentId;
-
-    private String shiftName;
-
-    private LocalTime startTime;
-
-    private LocalTime endTime;
-
-    public ShiftTemplate() {}
-
-    public ShiftTemplate(Long departmentId, String shiftName, LocalTime startTime, LocalTime endTime) {
-        this.departmentId = departmentId;
-        this.shiftName = shiftName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    // getters + setters omitted for brevity
+    private String startTime;
+    private String endTime;
 }

@@ -5,38 +5,26 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.encoder = encoder;
     }
 
     @Override
-    public User createUser(User user) {
-
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email must be unique");
-        }
-
-        user.setPassword(encoder.encode(user.getPassword()));
-
-        if (user.getRole() == null) {
-            user.setRole("ANALYST");
-        }
-
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
     @Override
     public User getUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElse(null);
     }
 
     @Override
@@ -45,30 +33,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-
-        User existing = getUser(id);
-
-        if (!existing.getEmail().equals(user.getEmail())
-                && userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email must be unique");
-        }
-
-        existing.setName(user.getName());
-        existing.setEmail(user.getEmail());
-
-        if (user.getPassword() != null) {
-            existing.setPassword(encoder.encode(user.getPassword()));
-        }
-
-        existing.setRole(user.getRole());
-
-        return userRepository.save(existing);
+    public User updateUser(Long id, User updated) {
+        return userRepository.findById(id)
+                .map(existing -> {
+                    existing.setName(updated.getName());
+                    existing.setEmail(updated.getEmail());
+                    existing.setPassword(updated.getPassword());
+                    return userRepository.save(existing);
+                }).orElse(null);
     }
 
     @Override
     public void deleteUser(Long id) {
-        getUser(id);
         userRepository.deleteById(id);
     }
 }

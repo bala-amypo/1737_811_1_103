@@ -5,8 +5,6 @@ import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ShiftTemplate {
 
     @Id

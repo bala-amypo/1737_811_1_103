@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ShiftTemplate;
+import com.example.demo.model.ShiftTemplate;
 import com.example.demo.service.ShiftTemplateService;
 import org.springframework.web.bind.annotation.*;
 

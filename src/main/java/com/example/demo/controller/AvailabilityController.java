@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Availability;
+import com.example.demo.model.Availability;
 import com.example.demo.service.AvailabilityService;
 import org.springframework.web.bind.annotation.*;
 

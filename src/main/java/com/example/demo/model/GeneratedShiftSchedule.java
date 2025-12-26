@@ -1,10 +1,10 @@
-public GeneratedShiftSchedule() {
-}
+package com.example.demo.model;
 
-public GeneratedShiftSchedule(String shiftDate, String shiftTime,
-                              Employee employee, ShiftTemplate shiftTemplate) {
-    this.shiftDate = shiftDate;
-    this.shiftTime = shiftTime;
-    this.employee = employee;
-    this.shiftTemplate = shiftTemplate;
+import java.time.LocalDate;
+
+public class GeneratedShiftSchedule {
+    private LocalDate shiftDate;
+
+    public LocalDate getShiftDate(){ return shiftDate; }
+    public void setShiftDate(LocalDate d){ this.shiftDate = d; }
 }

@@ -15,7 +15,15 @@ public class Employee {
         this.department = department;
     }
 
-    // Getters and Setters
+    // ✅ ADD THIS CONSTRUCTOR
+    public Employee(Long id, String name, String email, String department) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.department = department;
+    }
+
+    // getters and setters
     public Long getId() {
         return id;
     }

@@ -1,6 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.GeneratedShiftSchedule;
+import com.example.demo.model.GeneratedShiftSchedule;
 import com.example.demo.service.ScheduleService;
 
 import java.time.LocalDate;

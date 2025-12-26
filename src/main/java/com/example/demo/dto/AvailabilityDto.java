@@ -4,29 +4,31 @@ import java.time.LocalDate;
 
 public class AvailabilityDto {
 
-    private boolean available;
+    private Boolean available;
     private LocalDate availableDate;
 
     public AvailabilityDto() {
     }
 
-    public AvailabilityDto(boolean available, LocalDate availableDate) {
+    public AvailabilityDto(Boolean available, LocalDate availableDate) {
         this.available = available;
         this.availableDate = availableDate;
     }
 
-    public boolean isAvailable() {
+    // Getters & Setters
+
+    public Boolean getAvailable() {
         return available;
     }
-
-    public void setAvailable(boolean available) {
+ 
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
-
+ 
     public LocalDate getAvailableDate() {
         return availableDate;
     }
-
+ 
     public void setAvailableDate(LocalDate availableDate) {
         this.availableDate = availableDate;
     }

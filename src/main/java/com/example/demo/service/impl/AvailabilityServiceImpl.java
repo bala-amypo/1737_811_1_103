@@ -1,13 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Availability;
+import com.example.demo.model.EmployeeAvailability;
 import com.example.demo.repository.AvailabilityRepository;
 import com.example.demo.service.AvailabilityService;
-import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
 public class AvailabilityServiceImpl implements AvailabilityService {
 
     private final AvailabilityRepository availabilityRepository;
@@ -17,35 +16,39 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
-    public Availability saveAvailability(Availability availability) {
+    public EmployeeAvailability create(EmployeeAvailability availability) {
+
+        availabilityRepository
+                .findByEmployee_IdAndAvailableDate(
+                        availability.getEmployee().getId(),
+                        availability.getAvailableDate())
+                .ifPresent(a -> {
+                    throw new RuntimeException("Availability already exists");
+                });
+
         return availabilityRepository.save(availability);
     }
 
     @Override
-    public Availability getAvailability(Long id) {
-        return availabilityRepository.findById(id)
-                .orElse(null);
+    public EmployeeAvailability update(Long id, EmployeeAvailability updated) {
+
+        EmployeeAvailability existing = availabilityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Availability not found"));
+
+        existing.setAvailable(updated.getAvailable());
+
+        return availabilityRepository.save(existing);
     }
 
     @Override
-    public List<Availability> getAllAvailability() {
-        return availabilityRepository.findAll();
+    public void delete(Long id) {
+        EmployeeAvailability availability = availabilityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Availability not found"));
+        availabilityRepository.delete(availability);
     }
 
     @Override
-    public Availability updateAvailability(Long id, Availability updated) {
-        return availabilityRepository.findById(id)
-                .map(existing -> {
-                    existing.setEmployeeId(updated.getEmployeeId());
-                    existing.setDay(updated.getDay());
-                    existing.setStartTime(updated.getStartTime());
-                    existing.setEndTime(updated.getEndTime());
-                    return availabilityRepository.save(existing);
-                }).orElse(null);
-    }
-
-    @Override
-    public void deleteAvailability(Long id) {
-        availabilityRepository.deleteById(id);
+    public List<EmployeeAvailability> getByDate(LocalDate date) {
+        return availabilityRepository.findByAvailableDateAndAvailable(date, true);
     }
 }

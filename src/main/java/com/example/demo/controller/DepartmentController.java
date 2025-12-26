@@ -1,18 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.DepartmentDto;
 import com.example.demo.model.Department;
 import com.example.demo.service.DepartmentService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/departments")
-@Tag(name = "Departments Endpoints")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
@@ -21,33 +14,19 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @PostMapping("/")
-    @Operation(summary = "Create department")
-    public ResponseEntity<Department> create(@RequestBody DepartmentDto dto) {
-
-        Department department =
-                new Department(dto.getName(),
-                        dto.getDescription(),
-                        dto.getRequiredSkills());
-
-        return ResponseEntity.ok(departmentService.create(department));
-    }
-
-    @GetMapping("/")
-    @Operation(summary = "Get all departments")
-    public ResponseEntity<List<Department>> getAll() {
+    public ResponseEntity<List<Department>> list() {
         return ResponseEntity.ok(departmentService.getAll());
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get department by id")
-    public ResponseEntity<Department> get(@PathVariable Long id) {
+    public ResponseEntity<Department> get(Long id) {
         return ResponseEntity.ok(departmentService.get(id));
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete department")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Department> create(Department d) {
+        return ResponseEntity.ok(departmentService.create(d));
+    }
+
+    public ResponseEntity<String> delete(Long id) {
         departmentService.delete(id);
         return ResponseEntity.ok("Deleted");
     }

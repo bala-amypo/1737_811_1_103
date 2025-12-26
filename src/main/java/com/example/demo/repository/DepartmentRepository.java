@@ -1,8 +1,12 @@
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.entity.Department;
+import com.example.demo.model.Department;
+import java.util.*;
 
-public interface DepartmentRepository extends JpaRepository<Department, Long> {
-
+public interface DepartmentRepository {
+    Optional<Department> findById(Long id);
+    boolean existsByName(String name);
+    List<Department> findAll();
+    Department save(Department d);
+    void delete(Department d);
 }

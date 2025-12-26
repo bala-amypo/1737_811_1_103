@@ -1,18 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.EmployeeDto;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/employees")
-@Tag(name = "Employees Endpoints")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -21,36 +14,23 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping("/register")
-    @Operation(summary = "Create employee")
-    public ResponseEntity<Employee> create(@RequestBody EmployeeDto dto) {
-
-        Employee employee = new Employee(
-                dto.getFullName(),
-                dto.getEmail(),
-                dto.getRole(),
-                dto.getSkills(),
-                dto.getMaxWeeklyHours()
-        );
-
-        return ResponseEntity.ok(employeeService.createEmployee(employee));
-    }
-
-    @GetMapping("/all")
-    @Operation(summary = "Get all employees")
-    public ResponseEntity<List<Employee>> getAll() {
+    public ResponseEntity<List<Employee>> list() {
         return ResponseEntity.ok(employeeService.getAll());
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get employee by id")
-    public ResponseEntity<Employee> get(@PathVariable Long id) {
+    public ResponseEntity<Employee> get(Long id) {
         return ResponseEntity.ok(employeeService.getEmployee(id));
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete employee")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Employee> create(Employee e) {
+        return ResponseEntity.ok(employeeService.createEmployee(e));
+    }
+
+    public ResponseEntity<Employee> update(Long id, Employee e) {
+        return ResponseEntity.ok(employeeService.updateEmployee(id, e));
+    }
+
+    public ResponseEntity<String> delete(Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok("Deleted");
     }

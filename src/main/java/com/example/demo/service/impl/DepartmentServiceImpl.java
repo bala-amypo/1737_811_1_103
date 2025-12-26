@@ -1,48 +1,40 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Department;
+import com.example.demo.model.Department;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.service.DepartmentService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final DepartmentRepository departmentRepository;
+    private final DepartmentRepository repo;
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
-        this.departmentRepository = departmentRepository;
+    public DepartmentServiceImpl(DepartmentRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public Department saveDepartment(Department department) {
-        return departmentRepository.save(department);
+    public Department create(Department d) {
+        if (repo.existsByName(d.getName()))
+            throw new RuntimeException("exists");
+        return repo.save(d);
     }
 
     @Override
-    public Department getDepartment(Long id) {
-        return departmentRepository.findById(id)
-                .orElse(null);
+    public Department get(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public List<Department> getAll() {
+        return repo.findAll();
     }
 
     @Override
-    public Department updateDepartment(Long id, Department updated) {
-        return departmentRepository.findById(id)
-                .map(existing -> {
-                    existing.setName(updated.getName());
-                    return departmentRepository.save(existing);
-                }).orElse(null);
-    }
-
-    @Override
-    public void deleteDepartment(Long id) {
-        departmentRepository.deleteById(id);
+    public void delete(Long id) {
+        Department d = get(id);
+        repo.delete(d);
     }
 }

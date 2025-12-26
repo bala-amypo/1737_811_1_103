@@ -1,50 +1,47 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ShiftTemplate;
+import com.example.demo.model.ShiftTemplate;
+import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.repository.ShiftTemplateRepository;
 import com.example.demo.service.ShiftTemplateService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class ShiftTemplateServiceImpl implements ShiftTemplateService {
 
-    private final ShiftTemplateRepository shiftTemplateRepository;
+    private final ShiftTemplateRepository repo;
+    private final DepartmentRepository deptRepo;
 
-    public ShiftTemplateServiceImpl(ShiftTemplateRepository shiftTemplateRepository) {
-        this.shiftTemplateRepository = shiftTemplateRepository;
+    public ShiftTemplateServiceImpl(ShiftTemplateRepository r,
+                                    DepartmentRepository d) {
+        this.repo = r;
+        this.deptRepo = d;
     }
 
     @Override
-    public ShiftTemplate saveShiftTemplate(ShiftTemplate shiftTemplate) {
-        return shiftTemplateRepository.save(shiftTemplate);
+    public ShiftTemplate create(ShiftTemplate s) {
+
+        Long deptId = s.getDepartment().getId();
+        deptRepo.findById(deptId)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        if (s.getEndTime().isBefore(s.getStartTime()))
+            throw new RuntimeException("after");
+
+        if (repo.findByTemplateNameAndDepartment_Id(
+                s.getTemplateName(), deptId).isPresent())
+            throw new RuntimeException("unique");
+
+        return repo.save(s);
     }
 
     @Override
-    public ShiftTemplate getShiftTemplate(Long id) {
-        return shiftTemplateRepository.findById(id)
-                .orElse(null);
+    public List<ShiftTemplate> getByDepartment(Long deptId) {
+        return repo.findByDepartment_Id(deptId);
     }
 
     @Override
-    public List<ShiftTemplate> getAllShiftTemplates() {
-        return shiftTemplateRepository.findAll();
-    }
-
-    @Override
-    public ShiftTemplate updateShiftTemplate(Long id, ShiftTemplate updated) {
-        return shiftTemplateRepository.findById(id)
-                .map(existing -> {
-                    existing.setDepartmentId(updated.getDepartmentId());
-                    existing.setStartTime(updated.getStartTime());
-                    existing.setEndTime(updated.getEndTime());
-                    return shiftTemplateRepository.save(existing);
-                }).orElse(null);
-    }
-
-    @Override
-    public void deleteShiftTemplate(Long id) {
-        shiftTemplateRepository.deleteById(id);
+    public List<ShiftTemplate> getAll() {
+        return repo.findAll();
     }
 }

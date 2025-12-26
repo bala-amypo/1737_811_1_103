@@ -1,29 +1,32 @@
 package com.example.demo.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Employee {
 
     private Long id;
-    private String name;
+    private String fullName;
     private String email;
-    private String department;
+    private String role;
+    private String skills;
+    private int maxHours;
 
+    // REQUIRED: No-arg constructor
     public Employee() {}
 
-    public Employee(String name, String email, String department) {
-        this.name = name;
+    // REQUIRED: Constructor used by tests
+    public Employee(String fullName, String email, String role, String skills, int maxHours) {
+        this.fullName = fullName;
         this.email = email;
-        this.department = department;
+        this.role = (role == null || role.isEmpty()) ? "STAFF" : role;
+        this.skills = skills;
+        this.maxHours = maxHours;
     }
 
-    // ✅ ADD THIS CONSTRUCTOR
-    public Employee(Long id, String name, String email, String department) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.department = department;
-    }
+    // ---------------- GETTERS & SETTERS ----------------
 
-    // getters and setters
     public Long getId() {
         return id;
     }
@@ -32,12 +35,12 @@ public class Employee {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -48,11 +51,45 @@ public class Employee {
         this.email = email;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getRole() {
+        return role == null ? "STAFF" : role;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getSkills() {
+        return skills;
+    }
+
+    public void setSkills(String skills) {
+        this.skills = skills;
+    }
+
+    public int getMaxHours() {
+        return maxHours;
+    }
+
+    public void setMaxHours(int maxHours) {
+        this.maxHours = maxHours;
+    }
+
+    // ---------------- HELPER METHODS ----------------
+
+    // REQUIRED BY TESTS: skill parsing
+    public Set<String> getSkillsSet() {
+        if (skills == null || skills.isEmpty()) return new HashSet<>();
+        return new HashSet<>(Arrays.asList(skills.split(",")));
+    }
+
+    // TESTS CALL e.getSkills().contains("JAVA")
+    public String getSkillsAsString() {
+        return skills;
+    }
+
+    // Alias for test compatibility
+    public String getSkills() {
+        return skills;
     }
 }

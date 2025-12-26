@@ -9,7 +9,6 @@ public class EmployeeAvailability {
     private LocalDate availableDate;
     private Boolean available;
 
-    // ---------------- CONSTRUCTORS ----------------
     public EmployeeAvailability() {}
 
     public EmployeeAvailability(Employee employee, LocalDate availableDate, Boolean available) {
@@ -18,7 +17,7 @@ public class EmployeeAvailability {
         this.available = available;
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -9,7 +9,6 @@ public class GeneratedShiftSchedule {
     private ShiftTemplate shiftTemplate;
     private LocalDate shiftDate;
 
-    // ---------------- CONSTRUCTORS ----------------
     public GeneratedShiftSchedule() {}
 
     public GeneratedShiftSchedule(Employee employee, ShiftTemplate shiftTemplate, LocalDate shiftDate) {
@@ -18,7 +17,7 @@ public class GeneratedShiftSchedule {
         this.shiftDate = shiftDate;
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+    // Getters and Setters
     public Long getId() {
         return id;
     }

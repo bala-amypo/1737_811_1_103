@@ -7,7 +7,6 @@ public class AvailabilityDto {
     private Boolean available;
     private LocalDate availableDate;
 
-    // ---------------- CONSTRUCTORS ----------------
     public AvailabilityDto() {}
 
     public AvailabilityDto(Boolean available, LocalDate availableDate) {
@@ -15,7 +14,7 @@ public class AvailabilityDto {
         this.availableDate = availableDate;
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+    // Getters and Setters
     public Boolean getAvailable() {
         return available;
     }

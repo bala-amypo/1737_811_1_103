@@ -5,7 +5,13 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    Employee saveEmployee(Employee employee);
+    List<Employee> getAll();
 
-    List<Employee> getAllEmployees();
+    Employee getEmployee(Long id);
+
+    Employee createEmployee(Employee employee);
+
+    Employee updateEmployee(Long id, Employee employee);
+
+    void deleteEmployee(Long id);
 }

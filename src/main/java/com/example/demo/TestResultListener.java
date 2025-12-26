@@ -18,7 +18,6 @@ public class TestResultListener implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
-        System.out.println("TOTAL PASSED: " + context.getPassedTests().size());
-        System.out.println("TOTAL FAILED: " + context.getFailedTests().size());
+        System.out.println("FINISHED");
     }
 }

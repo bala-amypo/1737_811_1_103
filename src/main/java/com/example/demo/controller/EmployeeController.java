@@ -1,13 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Employee;
+import com.example.demo.dto.EmployeeDto;
+import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
+@Tag(name = "Employees Endpoints")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -16,29 +21,37 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PostMapping
-    public Employee create(@RequestBody Employee employee) {
-        return employeeService.saveEmployee(employee);
+    @PostMapping("/register")
+    @Operation(summary = "Create employee")
+    public ResponseEntity<Employee> create(@RequestBody EmployeeDto dto) {
+
+        Employee employee = new Employee(
+                dto.getFullName(),
+                dto.getEmail(),
+                dto.getRole(),
+                dto.getSkills(),
+                dto.getMaxWeeklyHours()
+        );
+
+        return ResponseEntity.ok(employeeService.createEmployee(employee));
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Get all employees")
+    public ResponseEntity<List<Employee>> getAll() {
+        return ResponseEntity.ok(employeeService.getAll());
     }
 
     @GetMapping("/{id}")
-    public Employee get(@PathVariable Long id) {
-        return employeeService.getEmployee(id);
-    }
-
-    @GetMapping
-    public List<Employee> getAll() {
-        return employeeService.getAllEmployees();
-    }
-
-    @PutMapping("/{id}")
-    public Employee update(@PathVariable Long id, @RequestBody Employee employee) {
-        return employeeService.updateEmployee(id, employee);
+    @Operation(summary = "Get employee by id")
+    public ResponseEntity<Employee> get(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getEmployee(id));
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    @Operation(summary = "Delete employee")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
-        return "Employee deleted successfully";
+        return ResponseEntity.ok("Deleted");
     }
 }

@@ -1,15 +1,18 @@
 package com.example.demo.controller;
-import com.example.demo.service.ScheduleService;
-import com.example.demo.service.GeneratedShiftScheduleService;
-import com.example.demo.entity.GeneratedShiftSchedule;
 
+import com.example.demo.model.GeneratedShiftSchedule;
+import com.example.demo.service.ScheduleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/generated-shift-schedules")
+@RequestMapping("/api/schedules")
+@Tag(name = "Shift Schedules Endpoints")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
@@ -18,29 +21,21 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping
-    public GeneratedShiftSchedule create(@RequestBody GeneratedShiftSchedule schedule) {
-        return scheduleService.saveSchedule(schedule);
+    @PostMapping("/generate/{date}")
+    @Operation(summary = "Generate schedule")
+    public ResponseEntity<List<GeneratedShiftSchedule>> generate(
+            @PathVariable String date) {
+
+        return ResponseEntity.ok(
+                scheduleService.generateForDate(LocalDate.parse(date)));
     }
 
-    @GetMapping("/{id}")
-    public GeneratedShiftSchedule get(@PathVariable Long id) {
-        return scheduleService.getSchedule(id);
-    }
+    @GetMapping("/date/{date}")
+    @Operation(summary = "Get schedule by date")
+    public ResponseEntity<List<GeneratedShiftSchedule>> getByDate(
+            @PathVariable String date) {
 
-    @GetMapping
-    public List<GeneratedShiftSchedule> getAll() {
-        return scheduleService.getAllSchedules();
-    }
-
-    @PutMapping("/{id}")
-    public GeneratedShiftSchedule update(@PathVariable Long id, @RequestBody GeneratedShiftSchedule schedule) {
-        return scheduleService.updateSchedule(id, schedule);
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
-        return "Generated shift schedule deleted successfully";
+        return ResponseEntity.ok(
+                scheduleService.getByDate(LocalDate.parse(date)));
     }
 }

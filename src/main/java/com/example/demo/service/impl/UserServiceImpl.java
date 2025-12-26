@@ -1,50 +1,39 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
-
-@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public User saveUser(User user) {
+    public User register(User user) {
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("User already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getRole() == null) {
+            user.setRole("ANALYST");
+        }
+
         return userRepository.save(user);
     }
 
     @Override
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElse(null);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User updateUser(Long id, User updated) {
-        return userRepository.findById(id)
-                .map(existing -> {
-                    existing.setName(updated.getName());
-                    existing.setEmail(updated.getEmail());
-                    existing.setPassword(updated.getPassword());
-                    return userRepository.save(existing);
-                }).orElse(null);
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

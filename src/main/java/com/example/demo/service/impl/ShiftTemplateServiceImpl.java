@@ -1,12 +1,13 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.ShiftTemplate;
+import com.example.demo.entity.ShiftTemplate;
 import com.example.demo.repository.ShiftTemplateRepository;
 import com.example.demo.service.ShiftTemplateService;
-import com.example.demo.util.TimeUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ShiftTemplateServiceImpl implements ShiftTemplateService {
 
     private final ShiftTemplateRepository shiftTemplateRepository;
@@ -16,25 +17,34 @@ public class ShiftTemplateServiceImpl implements ShiftTemplateService {
     }
 
     @Override
-    public ShiftTemplate create(ShiftTemplate template) {
-
-        if (!TimeUtils.isAfter(template.getStartTime(), template.getEndTime())) {
-            throw new IllegalArgumentException("endTime must be after startTime");
-        }
-
-        shiftTemplateRepository
-                .findByTemplateNameAndDepartment_Id(
-                        template.getTemplateName(),
-                        template.getDepartment().getId())
-                .ifPresent(t -> {
-                    throw new RuntimeException("Template name must be unique");
-                });
-
-        return shiftTemplateRepository.save(template);
+    public ShiftTemplate saveShiftTemplate(ShiftTemplate shiftTemplate) {
+        return shiftTemplateRepository.save(shiftTemplate);
     }
 
     @Override
-    public List<ShiftTemplate> getByDepartment(Long departmentId) {
-        return shiftTemplateRepository.findByDepartment_Id(departmentId);
+    public ShiftTemplate getShiftTemplate(Long id) {
+        return shiftTemplateRepository.findById(id)
+                .orElse(null);
+    }
+
+    @Override
+    public List<ShiftTemplate> getAllShiftTemplates() {
+        return shiftTemplateRepository.findAll();
+    }
+
+    @Override
+    public ShiftTemplate updateShiftTemplate(Long id, ShiftTemplate updated) {
+        return shiftTemplateRepository.findById(id)
+                .map(existing -> {
+                    existing.setDepartmentId(updated.getDepartmentId());
+                    existing.setStartTime(updated.getStartTime());
+                    existing.setEndTime(updated.getEndTime());
+                    return shiftTemplateRepository.save(existing);
+                }).orElse(null);
+    }
+
+    @Override
+    public void deleteShiftTemplate(Long id) {
+        shiftTemplateRepository.deleteById(id);
     }
 }

@@ -1,11 +1,13 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Employee;
+import com.example.demo.entity.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
@@ -15,62 +17,36 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee createEmployee(Employee employee) {
-
-        if (employeeRepository.existsByEmail(employee.getEmail())) {
-            throw new RuntimeException("Employee already exists");
-        }
-
-        if (employee.getMaxWeeklyHours() == null || employee.getMaxWeeklyHours() <= 0) {
-            throw new IllegalArgumentException("maxWeeklyHours must be greater than zero");
-        }
-
-        if (employee.getRole() == null) {
-            employee.setRole("STAFF");
-        }
-
+    public Employee saveEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
     @Override
     public Employee getEmployee(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElse(null);
     }
 
     @Override
-    public Employee updateEmployee(Long id, Employee updated) {
-
-        Employee existing = getEmployee(id);
-
-        if (!existing.getEmail().equals(updated.getEmail())
-                && employeeRepository.existsByEmail(updated.getEmail())) {
-            throw new RuntimeException("Employee already exists");
-        }
-
-        existing.setFullName(updated.getFullName());
-        existing.setEmail(updated.getEmail());
-        existing.setRole(updated.getRole());
-        existing.setSkills(updated.getSkills());
-        existing.setMaxWeeklyHours(updated.getMaxWeeklyHours());
-
-        return employeeRepository.save(existing);
-    }
-
-    @Override
-    public void deleteEmployee(Long id) {
-        Employee employee = getEmployee(id);
-        employeeRepository.delete(employee);
-    }
-
-    @Override
-    public List<Employee> getAll() {
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
     @Override
-    public Employee findByEmail(String email) {
-        return employeeRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    public Employee updateEmployee(Long id, Employee updated) {
+        return employeeRepository.findById(id)
+                .map(existing -> {
+                    existing.setName(updated.getName());
+                    existing.setEmail(updated.getEmail());
+                    existing.setPhone(updated.getPhone());
+                    existing.setPosition(updated.getPosition());
+                    existing.setActive(updated.getActive());
+                    return employeeRepository.save(existing);
+                }).orElse(null);
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
     }
 }

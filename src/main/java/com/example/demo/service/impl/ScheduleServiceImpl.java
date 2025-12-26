@@ -1,80 +1,51 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.GeneratedShiftSchedule;
+import com.example.demo.repository.GeneratedShiftScheduleRepository;
 import com.example.demo.service.ScheduleService;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private final DepartmentRepository departmentRepository;
-    private final ShiftTemplateRepository shiftTemplateRepository;
-    private final AvailabilityRepository availabilityRepository;
-    private final GeneratedShiftScheduleRepository scheduleRepository;
+    private final GeneratedShiftScheduleRepository repo;
 
-    public ScheduleServiceImpl(DepartmentRepository departmentRepository,
-                               ShiftTemplateRepository shiftTemplateRepository,
-                               AvailabilityRepository availabilityRepository,
-                               GeneratedShiftScheduleRepository scheduleRepository) {
-        this.departmentRepository = departmentRepository;
-        this.shiftTemplateRepository = shiftTemplateRepository;
-        this.availabilityRepository = availabilityRepository;
-        this.scheduleRepository = scheduleRepository;
+    public ScheduleServiceImpl(GeneratedShiftScheduleRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public List<GeneratedShiftSchedule> generateForDate(LocalDate date) {
-
-        List<GeneratedShiftSchedule> result = new ArrayList<>();
-
-        List<EmployeeAvailability> availableEmployees =
-                availabilityRepository.findByAvailableDateAndAvailable(date, true);
-
-        if (availableEmployees.isEmpty()) {
-            return result;
-        }
-
-        for (Department dept : departmentRepository.findAll()) {
-
-            List<ShiftTemplate> templates =
-                    shiftTemplateRepository.findByDepartment_Id(dept.getId());
-
-            for (ShiftTemplate template : templates) {
-
-                for (EmployeeAvailability availability : availableEmployees) {
-
-                    Employee emp = availability.getEmployee();
-
-                    if (emp.getSkillSet().containsAll(
-                            template.getRequiredSkills() == null
-                                    ? List.of()
-                                    : List.of(template.getRequiredSkills().split(",")))) {
-
-                        GeneratedShiftSchedule schedule =
-                                new GeneratedShiftSchedule(
-                                        date,
-                                        template.getStartTime(),
-                                        template.getEndTime(),
-                                        template,
-                                        dept,
-                                        emp);
-
-                        scheduleRepository.save(schedule);
-                        result.add(schedule);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return result;
+    public GeneratedShiftSchedule saveSchedule(GeneratedShiftSchedule schedule) {
+        return repo.save(schedule);
     }
 
     @Override
-    public List<GeneratedShiftSchedule> getByDate(LocalDate date) {
-        return scheduleRepository.findByShiftDate(date);
+    public GeneratedShiftSchedule getSchedule(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+    }
+
+    @Override
+    public List<GeneratedShiftSchedule> getAllSchedules() {
+        return repo.findAll();
+    }
+
+    @Override
+    public GeneratedShiftSchedule updateSchedule(Long id, GeneratedShiftSchedule schedule) {
+        GeneratedShiftSchedule existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+
+        existing.setDate(schedule.getDate());
+        existing.setEmployeeId(schedule.getEmployeeId());
+        existing.setShiftTemplateId(schedule.getShiftTemplateId());
+
+        return repo.save(existing);
+    }
+
+    @Override
+    public void deleteSchedule(Long id) {
+        repo.deleteById(id);
     }
 }

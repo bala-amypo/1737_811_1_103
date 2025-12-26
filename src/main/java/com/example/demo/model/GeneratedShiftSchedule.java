@@ -5,18 +5,20 @@ import java.time.LocalDate;
 public class GeneratedShiftSchedule {
 
     private Long id;
-    private Long employeeId;
-    private String shiftName;
+    private Employee employee;
+    private ShiftTemplate shiftTemplate;
     private LocalDate shiftDate;
 
+    // ---------------- CONSTRUCTORS ----------------
     public GeneratedShiftSchedule() {}
 
-    public GeneratedShiftSchedule(Long employeeId, String shiftName, LocalDate shiftDate) {
-        this.employeeId = employeeId;
-        this.shiftName = shiftName;
+    public GeneratedShiftSchedule(Employee employee, ShiftTemplate shiftTemplate, LocalDate shiftDate) {
+        this.employee = employee;
+        this.shiftTemplate = shiftTemplate;
         this.shiftDate = shiftDate;
     }
 
+    // ---------------- GETTERS & SETTERS ----------------
     public Long getId() {
         return id;
     }
@@ -25,20 +27,20 @@ public class GeneratedShiftSchedule {
         this.id = id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
-    public String getShiftName() {
-        return shiftName;
+    public ShiftTemplate getShiftTemplate() {
+        return shiftTemplate;
     }
 
-    public void setShiftName(String shiftName) {
-        this.shiftName = shiftName;
+    public void setShiftTemplate(ShiftTemplate shiftTemplate) {
+        this.shiftTemplate = shiftTemplate;
     }
 
     public LocalDate getShiftDate() {

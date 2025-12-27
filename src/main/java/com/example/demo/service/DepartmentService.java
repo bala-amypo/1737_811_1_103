@@ -4,8 +4,8 @@ import com.example.demo.model.Department;
 import java.util.List;
 
 public interface DepartmentService {
-    Department create(Department d);
+    Department create(Department department);
     Department get(Long id);
-    List<Department> getAll();
     void delete(Long id);
+    List<Department> getAll();
 }

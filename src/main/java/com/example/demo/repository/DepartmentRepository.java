@@ -1,12 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Department;
-import java.util.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DepartmentRepository {
-    Optional<Department> findById(Long id);
+@Repository
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
     boolean existsByName(String name);
-    List<Department> findAll();
-    Department save(Department d);
-    void delete(Department d);
 }

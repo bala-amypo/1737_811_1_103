@@ -1,13 +1,13 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Employee;
-import java.util.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-public interface EmployeeRepository {
-    Optional<Employee> findById(Long id);
-    Optional<Employee> findByEmail(String email);
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     boolean existsByEmail(String email);
-    List<Employee> findAll();
-    Employee save(Employee e);
-    void delete(Employee e);
+    Optional<Employee> findByEmail(String email);
 }
+

@@ -1,27 +1,30 @@
 package com.example.demo.model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "departments")
 public class Department {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String name;
+    
     private String description;
+    
     private String requiredSkills;
 
-    // REQUIRED: No-arg constructor
-    public Department() {}
+    public Department() {
+    }
 
-    // REQUIRED: Constructor used in tests
     public Department(String name, String description, String requiredSkills) {
         this.name = name;
         this.description = description;
         this.requiredSkills = requiredSkills;
     }
-
-    // ---------------- GETTERS & SETTERS ----------------
 
     public Long getId() {
         return id;
@@ -54,14 +57,5 @@ public class Department {
     public void setRequiredSkills(String requiredSkills) {
         this.requiredSkills = requiredSkills;
     }
-
-    // ---------------- HELPER METHODS ----------------
-
-    // Skill parsing used in tests
-    public Set<String> getRequiredSkillsSet() {
-        if (requiredSkills == null || requiredSkills.isEmpty()) {
-            return new HashSet<>();
-        }
-        return new HashSet<>(Arrays.asList(requiredSkills.split(",")));
-    }
 }
+

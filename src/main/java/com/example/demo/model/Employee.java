@@ -1,31 +1,36 @@
 package com.example.demo.model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "employees")
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
+    
+    @Column(unique = true)
     private String email;
+    
     private String role;
+    
     private String skills;
-    private int maxHours;
+    
+    private Integer maxHoursPerWeek;
 
-    // REQUIRED: No-arg constructor
-    public Employee() {}
-
-    // REQUIRED: Constructor used by tests
-    public Employee(String fullName, String email, String role, String skills, int maxHours) {
-        this.fullName = fullName;
-        this.email = email;
-        this.role = (role == null || role.isEmpty()) ? "STAFF" : role;
-        this.skills = skills;
-        this.maxHours = maxHours;
+    public Employee() {
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+    public Employee(String fullName, String email, String role, String skills, Integer maxHoursPerWeek) {
+        this.fullName = fullName;
+        this.email = email;
+        this.role = role;
+        this.skills = skills;
+        this.maxHoursPerWeek = maxHoursPerWeek;
+    }
 
     public Long getId() {
         return id;
@@ -52,7 +57,7 @@ public class Employee {
     }
 
     public String getRole() {
-        return role == null ? "STAFF" : role;
+        return role;
     }
 
     public void setRole(String role) {
@@ -67,29 +72,11 @@ public class Employee {
         this.skills = skills;
     }
 
-    public int getMaxHours() {
-        return maxHours;
+    public Integer getMaxHoursPerWeek() {
+        return maxHoursPerWeek;
     }
 
-    public void setMaxHours(int maxHours) {
-        this.maxHours = maxHours;
-    }
-
-    // ---------------- HELPER METHODS ----------------
-
-    // REQUIRED BY TESTS: skill parsing
-    public Set<String> getSkillsSet() {
-        if (skills == null || skills.isEmpty()) return new HashSet<>();
-        return new HashSet<>(Arrays.asList(skills.split(",")));
-    }
-
-    // TESTS CALL e.getSkills().contains("JAVA")
-    public String getSkillsAsString() {
-        return skills;
-    }
-
-    // Alias for test compatibility
-    public String getSkills() {
-        return skills;
+    public void setMaxHoursPerWeek(Integer maxHoursPerWeek) {
+        this.maxHoursPerWeek = maxHoursPerWeek;
     }
 }

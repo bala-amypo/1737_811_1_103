@@ -3,38 +3,41 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Department;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.service.DepartmentService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final DepartmentRepository repo;
+    private final DepartmentRepository departmentRepository;
 
-    public DepartmentServiceImpl(DepartmentRepository repo) {
-        this.repo = repo;
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
-    public Department create(Department d) {
-        if (repo.existsByName(d.getName()))
-            throw new RuntimeException("exists");
-        return repo.save(d);
+    public Department create(Department department) {
+        if (departmentRepository.existsByName(department.getName())) {
+            throw new RuntimeException("Department name already exists");
+        }
+        return departmentRepository.save(department);
     }
 
     @Override
     public Department get(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
-    }
-
-    @Override
-    public List<Department> getAll() {
-        return repo.findAll();
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
     }
 
     @Override
     public void delete(Long id) {
-        Department d = get(id);
-        repo.delete(d);
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        departmentRepository.delete(department);
+    }
+
+    @Override
+    public List<Department> getAll() {
+        return departmentRepository.findAll();
     }
 }

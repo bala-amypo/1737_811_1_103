@@ -4,23 +4,19 @@ import java.time.LocalDate;
 
 public class AvailabilityDto {
 
-    private Boolean available;
+    private Long employeeId;
     private LocalDate availableDate;
+    private Boolean available;
 
-    public AvailabilityDto() {}
-
-    public AvailabilityDto(Boolean available, LocalDate availableDate) {
-        this.available = available;
-        this.availableDate = availableDate;
+    public AvailabilityDto() {
     }
 
-    // Getters and Setters
-    public Boolean getAvailable() {
-        return available;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setAvailable(Boolean available) {
-        this.available = available;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public LocalDate getAvailableDate() {
@@ -29,5 +25,13 @@ public class AvailabilityDto {
 
     public void setAvailableDate(LocalDate availableDate) {
         this.availableDate = availableDate;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 }

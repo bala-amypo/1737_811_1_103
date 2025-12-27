@@ -4,27 +4,34 @@ import com.example.demo.model.ShiftTemplate;
 import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.service.ShiftTemplateService;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/shift-templates")
 public class ShiftTemplateController {
 
     private final ShiftTemplateService shiftTemplateService;
     private final DepartmentRepository departmentRepository;
 
     public ShiftTemplateController(ShiftTemplateService shiftTemplateService,
-                                   DepartmentRepository departmentRepository) {
+                                  DepartmentRepository departmentRepository) {
         this.shiftTemplateService = shiftTemplateService;
         this.departmentRepository = departmentRepository;
     }
 
+    @PostMapping
+    public ResponseEntity<ShiftTemplate> create(@RequestBody ShiftTemplate shiftTemplate) {
+        return ResponseEntity.ok(shiftTemplateService.create(shiftTemplate));
+    }
+
+    @GetMapping
     public ResponseEntity<List<ShiftTemplate>> list() {
         return ResponseEntity.ok(shiftTemplateService.getAll());
     }
 
-    public ResponseEntity<List<ShiftTemplate>> byDepartment(Long deptId) {
-        departmentRepository.findById(deptId)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
-        return ResponseEntity.ok(shiftTemplateService.getByDepartment(deptId));
+    @GetMapping("/department/{departmentId}")
+    public ResponseEntity<List<ShiftTemplate>> byDepartment(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(shiftTemplateService.getByDepartment(departmentId));
     }
 }
